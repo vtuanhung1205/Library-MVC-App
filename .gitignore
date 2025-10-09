@@ -1,0 +1,79 @@
+###############################
+# ASP.NET MVC5 / Visual Studio 2019 + Docker/Mono
+###############################
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+x64/
+x86/
+_debug/
+_release/
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.cache
+*.tmp
+
+# IDE files
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet
+packages/
+!packages/repositories.config
+
+# Docker / Linux cache
+Dockerfile.*
+.dockerignore
+.env
+tmp/
+cache/
+*.tar
+*.gz
+
+# Entity Framework (keep migrations folder itself)
+Migrations/obj/
+Migrations/bin/
+
+# Data and uploads (runtime only)
+App_Data/
+Uploads/
+Data/
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# Logs / temp
+*.log
+*.bak
+*.swp
+*.swo
+*.orig
+
+# Frontend (optional)
+node_modules/
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# OS / editor junk
+.idea/
+_ReSharper*/
+*.DotSettings.user
+.DS_Store
+Thumbs.db
+desktop.ini
+
+###############################
+# End
+###############################
