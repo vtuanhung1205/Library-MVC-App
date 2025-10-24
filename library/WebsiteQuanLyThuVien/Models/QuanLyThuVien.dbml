@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="QuanLyThuVien" Class="QuanLyThuVienDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=(localdb)\ProjectsV13;Initial Catalog=QuanLyThuVien;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="QuanLyThuVienConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Catalog" Member="Catalogs">
+    <Type Name="Catalog">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CatalogCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CatalogName" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Association Name="Catalog_Product" Member="Products" ThisKey="Id" OtherKey="NumericalOrder" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Product" Member="Products">
+    <Type Name="Product">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NumericalOrder" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DocumentName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DocumentType" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="Author" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="YearofPublication" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Picture" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="UnitPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Catalog_Product" Member="Catalog" ThisKey="NumericalOrder" OtherKey="Id" Type="Catalog" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

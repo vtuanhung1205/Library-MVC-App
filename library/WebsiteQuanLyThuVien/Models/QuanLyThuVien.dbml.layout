@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="QuanLyThuVien">
+  <DataContextMoniker Name="/QuanLyThuVienDataContext" />
+  <nestedChildShapes>
+    <classShape Id="d084941f-b91c-42e3-8a43-567b3ee3befc" absoluteBounds="1.875, 2.5, 2, 1.3862939453125">
+      <DataClassMoniker Name="/QuanLyThuVienDataContext/Catalog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e50a5ba2-8e64-47af-a2bd-fcd281176dcf" absoluteBounds="1.8900000000000001, 2.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c86fdada-add9-44a3-8f16-9c950e88ec77" absoluteBounds="5.375, 2.5, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/QuanLyThuVienDataContext/Product" />
+      <nestedChildShapes>
+        <elementListCompartment Id="10203046-55f8-4ac0-9f09-ab3a9a659a03" absoluteBounds="5.39, 2.96, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.875 : 3.19314697265625); (5.375 : 3.19314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/QuanLyThuVienDataContext/Catalog/Catalog_Product" />
+      <nodes>
+        <classShapeMoniker Id="d084941f-b91c-42e3-8a43-567b3ee3befc" />
+        <classShapeMoniker Id="c86fdada-add9-44a3-8f16-9c950e88ec77" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
