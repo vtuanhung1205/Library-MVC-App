@@ -1,0 +1,51 @@
+@model QuanLyThuVien.Models.NguoiDung
+@{ ViewData["Title"] = "Đăng Ký Thành Viên"; }
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="fw-bold mb-0"><i class="bi bi-person-plus-fill me-2"></i> Đăng Ký Thành Viên</h3>
+                    <p class="mb-0 opacity-75">Tham gia cộng đồng đọc sách ngay hôm nay</p>
+                </div>
+                <div class="card-body p-5 bg-white">
+                    @if (ViewBag.Error != null) { 
+                        <div class="alert alert-danger"><i class="bi bi-exclamation-circle me-2"></i> @ViewBag.Error</div> 
+                    }
+
+                    <form asp-action="Register">
+                        <div class="form-floating mb-3">
+                            <input asp-for="HoTen" class="form-control" placeholder="Họ và tên" required />
+                            <label asp-for="HoTen">Họ và tên đầy đủ</label>
+                            <span asp-validation-for="HoTen" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" class="form-control" placeholder="name@example.com" required />
+                            <label asp-for="Email">Địa chỉ Email</label>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input asp-for="MatKhau" type="password" class="form-control" placeholder="Mật khẩu" required />
+                            <label asp-for="MatKhau">Mật khẩu</label>
+                            <span asp-validation-for="MatKhau" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm fw-bold">
+                                <i class="bi bi-check-lg"></i> Tạo Tài Khoản
+                            </button>
+                            <a asp-action="Login" class="btn btn-outline-secondary btn-lg rounded-pill">
+                                Đã có tài khoản? Đăng nhập
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

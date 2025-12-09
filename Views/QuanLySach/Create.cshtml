@@ -1,0 +1,38 @@
+@model QuanLyThuVien.Models.Sach
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<div class="container mt-3">
+    <h2>Thêm / Sửa Sách</h2>
+    <form asp-action="Create" method="post"> <!-- Nếu là Edit thì đổi thành asp-action="Edit" -->
+        
+        <!-- Nếu là Edit thì cần thêm dòng này: <input type="hidden" asp-for="MaSach" /> -->
+
+        <div class="mb-3">
+            <label class="form-label">Tên Sách</label>
+            <input asp-for="TenSach" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tác Giả</label>
+            <input asp-for="TacGia" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Thể Loại</label>
+            <select asp-for="MaTheLoai" class="form-control" asp-items="ViewBag.MaTheLoai"></select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Giá Tiền</label>
+            <input asp-for="Gia" class="form-control" type="number" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Link Ảnh Bìa (URL)</label>
+            <input asp-for="AnhBia" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Số Hiệu (Call Number)</label>
+            <input asp-for="SoHieu" class="form-control" />
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Lưu lại</button>
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

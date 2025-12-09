@@ -1,0 +1,61 @@
+@model IEnumerable<QuanLyThuVien.Models.Sach>
+@{ ViewData["Title"] = "Thư viện sách"; }
+
+<div class="container py-4">
+    <!-- Header & Filter -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary"><i class="bi bi-grid-3x3-gap-fill"></i> Kho Tài Liệu</h2>
+        
+        <!-- Form tìm kiếm nhỏ gọn bên phải -->
+        <form asp-action="TimKiem" method="get" class="d-flex">
+            <input type="text" name="tuKhoa" class="form-control me-2" placeholder="Tìm nhanh..." value="@ViewBag.TuKhoa">
+            <button type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+
+    <!-- Grid Sách -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <!-- Ảnh bìa -->
+                    <div class="position-relative overflow-hidden" style="height: 300px;">
+                        <img src="@item.AnhBia" class="card-img-top w-100 h-100" style="object-fit: cover;" alt="@item.TenSach">
+                        
+                        <!-- Badge trạng thái -->
+                        <div class="position-absolute top-0 end-0 m-2">
+                            @if(item.CoSan) { <span class="badge bg-success shadow">Có sẵn</span> }
+                            else { <span class="badge bg-secondary shadow">Đã mượn</span> }
+                        </div>
+                        
+                        <!-- Badge loại tài liệu -->
+                        <div class="position-absolute top-0 start-0 m-2">
+                            @if(item.LoaiTaiLieu == "Giáo trình") { <span class="badge bg-warning text-dark shadow">Giáo trình</span> }
+                            else if(item.LoaiTaiLieu == "Tài liệu") { <span class="badge bg-info text-dark shadow">Tài liệu</span> }
+                        </div>
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title fw-bold text-truncate" title="@item.TenSach">@item.TenSach</h6>
+                        <p class="card-text text-muted small mb-2">@item.TacGia</p>
+                        
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <span class="text-primary fw-bold">
+                                @(item.Gia == 0 ? "Miễn phí" : item.Gia.ToString("N0") + " đ")
+                            </span>
+                            <a asp-action="Details" asp-route-id="@item.MaSach" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                Xem <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .hover-card { transition: transform 0.2s; }
+    .hover-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+</style>

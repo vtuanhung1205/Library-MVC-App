@@ -1,0 +1,110 @@
+@model QuanLyThuVien.Models.Sach
+@{
+    ViewData["Title"] = Model.TenSach;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Thư viện</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.TenSach</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="row g-0">
+                <!-- Cột Ảnh Bìa -->
+                <div class="col-md-4 bg-light d-flex align-items-center justify-content-center p-4">
+                    <div class="position-relative shadow-lg rounded-3" style="max-width: 300px;">
+                        <img src="@Model.AnhBia" class="img-fluid rounded-3" alt="@Model.TenSach">
+                        @if(Model.CoSan) {
+                            <span class="position-absolute top-0 end-0 badge bg-success m-2 shadow">Sẵn sàng</span>
+                        } else {
+                            <span class="position-absolute top-0 end-0 badge bg-secondary m-2 shadow">Đã mượn</span>
+                        }
+                    </div>
+                </div>
+
+                <!-- Cột Thông Tin -->
+                <div class="col-md-8 p-4 p-lg-5">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge bg-primary mb-2">@Model.LoaiTaiLieu</span>
+                            <h1 class="fw-bold text-dark mb-1">@Model.TenSach</h1>
+                            <p class="text-muted fs-5 mb-3">Tác giả: <span class="fw-bold text-dark">@Model.TacGia</span></p>
+                        </div>
+                        <div class="text-end">
+                            <h3 class="text-primary fw-bold">@(Model.Gia == 0 ? "Miễn phí" : Model.Gia.ToString("N0") + " đ")</h3>
+                            <small class="text-muted">Giá trị sách</small>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row mb-4">
+                        <div class="col-6 col-md-3 mb-3">
+                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.75rem;">Nhà Xuất Bản</small>
+                            <span>@Model.NhaXuatBan</span>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.75rem;">Năm XB</small>
+                            <span>@Model.NamXuatBan</span>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.75rem;">Số Hiệu (Call No)</small>
+                            <span class="font-monospace bg-light px-2 py-1 rounded border">@Model.SoHieu</span>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.75rem;">ISBN</small>
+                            <span>@Model.ISBN</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-bold">Tóm tắt nội dung</h5>
+                        <p class="text-secondary" style="line-height: 1.6;">@Model.TomTat</p>
+                    </div>
+
+                    <!-- Khu vực nút bấm -->
+                    <div class="d-flex gap-2 mt-auto">
+                        @if (TempData["Message"] != null) {
+                            <div class="alert alert-success w-100 mb-0"><i class="bi bi-check-circle-fill"></i> @TempData["Message"]</div>
+                        }
+                        else if (TempData["Error"] != null) {
+                            <div class="alert alert-danger w-100 mb-0"><i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]</div>
+                        }
+                        else
+                        {
+                            @if (Model.CoSan)
+                            {
+                                <form asp-action="DatMuon" method="post" class="flex-grow-1">
+                                    <input type="hidden" name="maSach" value="@Model.MaSach" />
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm">
+                                        <i class="bi bi-journal-plus me-2"></i> Đăng Ký Mượn
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary btn-lg flex-grow-1 rounded-pill" disabled>
+                                    <i class="bi bi-lock-fill me-2"></i> Tạm hết sách
+                                </button>
+                            }
+                        }
+                        
+                        @if(User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="QuanLySach" asp-action="Edit" asp-route-id="@Model.MaSach" class="btn btn-outline-warning btn-lg rounded-pill" title="Sửa sách">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

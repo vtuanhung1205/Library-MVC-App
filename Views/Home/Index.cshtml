@@ -1,0 +1,75 @@
+@{
+    ViewData["Title"] = "Trang Chủ";
+}
+
+<!-- HERO SECTION -->
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm text-center" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+    <div class="container-fluid py-5">
+        <h1 class="display-4 fw-bold text-primary"><i class="bi bi-book-half"></i> Quản Lý Thư Viện</h1>
+        <p class="col-md-8 fs-4 mx-auto text-muted">Khám phá kho tàng tri thức với hơn 100+ đầu sách, giáo trình và tài liệu học thuật.</p>
+        
+        <!-- Thanh tìm kiếm trung tâm -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <form asp-controller="Sach" asp-action="TimKiem" method="get">
+                    <div class="input-group input-group-lg shadow-sm">
+                        <input type="text" name="tuKhoa" class="form-control border-0" placeholder="Tìm tên sách, tác giả, ISBN..." aria-label="Search">
+                        <button class="btn btn-primary px-4" type="button"><i class="bi bi-search"></i> Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURED CATEGORIES -->
+<div class="container">
+    <h3 class="text-center mb-4 fw-bold text-secondary">Khám Phá Theo Danh Mục</h3>
+    <div class="row g-4">
+        <!-- Card 1 -->
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+                <div class="card-body">
+                    <i class="bi bi-laptop fs-1 text-info"></i>
+                    <h5 class="card-title mt-3">Công Nghệ</h5>
+                    <a asp-controller="Sach" asp-action="Index" asp-route-loai="Sách" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+                <div class="card-body">
+                    <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+                    <h5 class="card-title mt-3">Kinh Tế</h5>
+                    <a asp-controller="Sach" asp-action="Index" asp-route-loai="Giáo trình" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+                <div class="card-body">
+                    <i class="bi bi-translate fs-1 text-warning"></i>
+                    <h5 class="card-title mt-3">Ngoại Ngữ</h5>
+                    <a asp-controller="Sach" asp-action="Index" asp-route-loai="Giáo trình" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+                <div class="card-body">
+                    <i class="bi bi-mortarboard fs-1 text-danger"></i>
+                    <h5 class="card-title mt-3">Luận Văn</h5>
+                    <a asp-controller="Sach" asp-action="Index" asp-route-loai="Tài liệu" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-shadow:hover { transform: translateY(-5px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; }
+    .transition-card { transition: all 0.3s ease; }
+</style>

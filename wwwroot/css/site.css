@@ -1,0 +1,57 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Tùy chỉnh Navbar */
+.navbar {
+    transition: all 0.3s;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #0d6efd !important; /* Màu xanh primary khi di chuột */
+}
+
+.dropdown-menu {
+    border-radius: 0.5rem;
+    margin-top: 10px !important; /* Tạo khoảng cách nhỏ */
+}
+
+.dropdown-item {
+    padding: 8px 20px;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+}
+
+/* Badge đẹp hơn */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}

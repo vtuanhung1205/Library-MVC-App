@@ -1,0 +1,37 @@
+@model QuanLyThuVien.Models.TheLoai
+
+@{
+    ViewData["Title"] = "Thêm Thể Loại";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Thêm Thể Loại Mới</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="TenTheLoai" class="control-label fw-bold"></label>
+                    <input asp-for="TenTheLoai" class="form-control" placeholder="Nhập tên thể loại (VD: Khoa học viễn tưởng)" />
+                    <span asp-validation-for="TenTheLoai" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Lưu lại
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

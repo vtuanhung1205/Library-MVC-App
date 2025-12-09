@@ -1,0 +1,74 @@
+@model IEnumerable<QuanLyThuVien.Models.Sach>
+@{
+    ViewData["Title"] = "Quản Lý Sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark"><i class="bi bi-database-fill-gear text-danger"></i> Quản Lý Sách</h2>
+            <p class="text-muted mb-0">Quản lý kho tài liệu, chỉnh sửa và cập nhật thông tin.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">
+            <i class="bi bi-plus-lg me-2"></i> Thêm Sách Mới
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary">
+                        <tr>
+                            <th class="ps-4">Sách</th>
+                            <th>Thông tin</th>
+                            <th>Trạng thái</th>
+                            <th>Giá trị</th>
+                            <th class="text-end pe-4">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model) {
+                            <tr>
+                                <td class="ps-4" style="width: 300px;">
+                                    <div class="d-flex align-items-center">
+                                        <img src="@item.AnhBia" class="rounded border me-3" style="width: 50px; height: 75px; object-fit: cover;">
+                                        <div>
+                                            <div class="fw-bold text-dark text-truncate" style="max-width: 200px;">@item.TenSach</div>
+                                            <small class="text-muted">@item.SoHieu</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="small"><i class="bi bi-person me-1"></i> @item.TacGia</div>
+                                    <div class="small text-muted"><i class="bi bi-tag me-1"></i> @item.TheLoai?.TenTheLoai</div>
+                                </td>
+                                <td>
+                                    @if(item.CoSan) { <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Có sẵn</span> }
+                                    else { <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill">Đang mượn</span> }
+                                </td>
+                                <td class="fw-bold text-secondary">
+                                    @item.Gia.ToString("N0") đ
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.MaSach" class="btn btn-sm btn-outline-primary" title="Sửa">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.MaSach" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa sách này?');" title="Xóa">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white py-3">
+            <small class="text-muted">Tổng cộng: <strong>@Model.Count()</strong> đầu sách</small>
+        </div>
+    </div>
+</div>
