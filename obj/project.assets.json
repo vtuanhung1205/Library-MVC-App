@@ -8675,24 +8675,28 @@
     ]
   },
   "packageFolders": {
-    "/home/hans/.nuget/packages/": {}
+    "C:\\Users\\Tuan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/hans/Documents/Library-MVC-App/QuanLyThuVien.csproj",
+      "projectUniqueName": "C:\\Laura\\File Visual Code Purple\\QuanLyThuVienTest\\QuanLyThuVien\\QuanLyThuVien.csproj",
       "projectName": "QuanLyThuVien",
-      "projectPath": "/home/hans/Documents/Library-MVC-App/QuanLyThuVien.csproj",
-      "packagesPath": "/home/hans/.nuget/packages/",
-      "outputPath": "/home/hans/Documents/Library-MVC-App/obj/",
+      "projectPath": "C:\\Laura\\File Visual Code Purple\\QuanLyThuVienTest\\QuanLyThuVien\\QuanLyThuVien.csproj",
+      "packagesPath": "C:\\Users\\Tuan\\.nuget\\packages\\",
+      "outputPath": "C:\\Laura\\File Visual Code Purple\\QuanLyThuVienTest\\QuanLyThuVien\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/hans/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Tuan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.2.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Laura\\DevExpress 19.2\\Components\\System\\Components\\Packages": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -8752,7 +8756,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/hans/.dotnet/sdk/5.0.408/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
       }
     }
   }

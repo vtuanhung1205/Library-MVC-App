@@ -334,3 +334,4 @@ N'Tổng hợp các đề thi IELTS thực tế (Academic & General) trong năm 
 (N'Đề thi TOEIC có giải chi tiết', N'ETS', 0, 'https://m.media-amazon.com/images/I/51+G+g+u+L._SY466_.jpg', 7, 'TL-005', 'REF 428', N'Tài liệu', 
 N'Bộ đề thi thử TOEIC format mới nhất kèm lời giải chi tiết.');
 GO
+SELECT *FROM Sachs;
