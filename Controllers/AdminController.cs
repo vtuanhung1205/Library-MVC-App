@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace QuanLyThuVien.Controllers
 {
     // Chỉ cho phép Admin truy cập (Dựa vào Claim Role lúc Login)
-    [Authorize(Roles = "Admin")] 
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ThuVienContext _context;
@@ -40,7 +40,7 @@ namespace QuanLyThuVien.Controllers
         public IActionResult XacNhanTra(int maPhieu)
         {
             var phieu = _context.PhieuMuons.Include(p => p.Sach).FirstOrDefault(p => p.MaPhieu == maPhieu);
-            
+
             if (phieu != null && phieu.TrangThai == 0)
             {
                 // 1. Tính tiền phạt
@@ -55,8 +55,12 @@ namespace QuanLyThuVien.Controllers
                 }
 
                 // 2. Cập nhật trạng thái
-                phieu.TrangThai = 1; 
-                if (phieu.Sach != null) phieu.Sach.CoSan = true;
+                phieu.TrangThai = 1;
+                if (phieu.Sach != null)
+                {
+                    phieu.Sach.DaMuon -= 1;
+                    if (phieu.Sach.DaMuon < 0) phieu.Sach.DaMuon = 0; // Đề phòng lỗi âm
+                }
 
                 _context.SaveChanges();
 

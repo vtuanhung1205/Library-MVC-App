@@ -1,0 +1,43 @@
+@model IEnumerable<QuanLyThuVien.Models.Sach>
+@{
+    // Tạo ID duy nhất cho mỗi Carousel dựa trên ViewData truyền vào
+    string carouselId = ViewData["CarouselId"] as string ?? "defaultCarousel";
+}
+
+<div id="@carouselId" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+    <div class="carousel-inner">
+        @{
+            var books = Model.ToList();
+            // Chia danh sách thành các nhóm, mỗi nhóm 4 cuốn
+            int chunkSize = 4;
+            int totalChunks = (int)Math.Ceiling((double)books.Count / chunkSize);
+        }
+
+        @for (int i = 0; i < totalChunks; i++)
+        {
+            // Slide đầu tiên phải có class 'active'
+            <div class="carousel-item @(i == 0 ? "active" : "")">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                    @foreach (var item in books.Skip(i * chunkSize).Take(chunkSize))
+                    {
+                        <!-- Tái sử dụng thẻ sách cũ -->
+                        <partial name="_BookCard" model="item" />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Nút điều hướng (Chỉ hiện nếu có nhiều hơn 1 slide) -->
+    @if (totalChunks > 1)
+    {
+        <button class="carousel-control-prev custom-nav-btn" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next custom-nav-btn" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    }
+</div>

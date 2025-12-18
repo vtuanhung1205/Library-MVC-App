@@ -1,13 +1,17 @@
 @model IEnumerable<QuanLyThuVien.Models.PhieuMuon>
-@{ ViewData["Title"] = "Hồ sơ của tôi"; }
+@{
+    ViewData["Title"] = "Hồ sơ của tôi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <div class="container mt-4">
     <div class="row">
-        <!-- Sidebar thông tin -->
+        <!-- Sidebar (Giữ nguyên) -->
         <div class="col-md-3 mb-4">
             <div class="card border-0 shadow-sm text-center p-4">
                 <div class="mb-3">
-                    <img src="https://ui-avatars.com/api/?name=@User.Identity.Name&background=0D8ABC&color=fff&size=128" class="rounded-circle shadow" alt="Avatar">
+                    <img src="https://ui-avatars.com/api/?name=@User.Identity.Name&background=0D8ABC&color=fff&size=128"
+                        class="rounded-circle shadow" alt="Avatar">
                 </div>
                 <h5 class="fw-bold">@User.Identity.Name</h5>
                 <p class="text-muted small">Thành viên thư viện</p>
@@ -24,10 +28,19 @@
                     <h4 class="fw-bold"><i class="bi bi-journal-bookmark-fill text-primary"></i> Lịch Sử Mượn Sách</h4>
                 </div>
                 <div class="card-body px-4">
+                    <!-- Thông báo lỗi/thành công -->
+                    @if (TempData["Message"] != null)
+                    {
+                        <div class="alert alert-success"><i class="bi bi-check-circle"></i> @TempData["Message"]</div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> @TempData["Error"]</div>
+                    }
+
                     @if (!Model.Any())
                     {
                         <div class="text-center py-5 text-muted">
-                            <i class="bi bi-inbox fs-1"></i>
                             <p>Bạn chưa mượn cuốn sách nào.</p>
                             <a asp-controller="Sach" asp-action="Index" class="btn btn-primary">Đi mượn ngay</a>
                         </div>
@@ -51,7 +64,8 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="@item.Sach.AnhBia" class="rounded border me-2" style="width: 40px; height: 60px; object-fit: cover;">
+                                                    <img src="@item.Sach.AnhBia" class="rounded border me-2"
+                                                        style="width: 40px; height: 60px; object-fit: cover;">
                                                     <div>
                                                         <div class="fw-bold text-dark">@item.Sach.TenSach</div>
                                                         <small class="text-muted">@item.Sach.SoHieu</small>
@@ -59,19 +73,51 @@
                                                 </div>
                                             </td>
                                             <td>@item.NgayMuon.ToString("dd/MM")</td>
-                                            <td class="@(item.TrangThai == 0 && item.HanTra < DateTime.Now ? "text-danger fw-bold" : "")">
-                                                @item.HanTra.ToString("dd/MM")
+                                            <td
+                                                class="@(item.TrangThai == 0 && item.HanTra < DateTime.Now ? "text-danger fw-bold" : "")">
+                                                @item.HanTra.ToString("dd/MM/yyyy")
                                             </td>
                                             <td>
-                                                @if (item.TrangThai == 0) { <span class="badge bg-warning text-dark">Đang mượn</span> }
-                                                else { <span class="badge bg-success">Đã trả</span> }
-                                            </td>
-                                            <td>
-                                                @if (item.TrangThai == 0 && item.HanTra >= DateTime.Now && item.SoLanGiaHan == 0)
+                                                @if (item.TrangThai == 0)
                                                 {
-                                                    <a asp-action="GiaHan" asp-route-maPhieu="@item.MaPhieu" class="btn btn-sm btn-outline-info rounded-pill">
-                                                        <i class="bi bi-plus-circle"></i> Gia hạn
-                                                    </a>
+                                                    if (item.HanTra < DateTime.Now)
+                                                    {
+                                                        <span class="badge bg-danger">Quá hạn</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-warning text-dark">Đang mượn</span>
+                                                    }
+                                                }
+                                                else
+                                                {
+
+                                                    <span class="badge bg-success">Đã trả</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <!-- Logic hiển thị nút Gia hạn -->
+                                                @if (item.TrangThai == 0)
+                                                {
+                                                    if (item.HanTra < DateTime.Now)
+                                                    {
+                                                        <small class="text-danger">Phải trả sách</small>
+                                                    }
+                                                    else if (item.SoLanGiaHan < 2)
+                                                    {
+                                                        <!-- Nút mở Modal -->
+                                                        <button type="button" class="btn btn-sm btn-outline-info rounded-pill"
+                                                            data-bs-toggle="modal" data-bs-target="#extendModal" data-id="@item.MaPhieu"
+                                                            data-book="@item.Sach.TenSach"
+                                                            data-current="@item.HanTra.ToString("yyyy-MM-dd")">
+                                                            <i class="bi bi-calendar-plus"></i> Gia hạn
+                                                        </button>
+                                                        <div class="small text-muted mt-1">Đã gia hạn: @item.SoLanGiaHan/2</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="text-muted">Hết lượt gia hạn</small>
+                                                    }
                                                 }
                                             </td>
                                         </tr>
@@ -85,3 +131,77 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL GIA HẠN SÁCH -->
+<div class="modal fade" id="extendModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="GiaHan" method="post">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title"><i class="bi bi-calendar-date"></i> Gia Hạn Sách</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="maPhieu" id="modalMaPhieu" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Sách:</label>
+                        <input type="text" class="form-control-plaintext" id="modalTenSach" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Hạn trả hiện tại:</label>
+                        <input type="date" class="form-control" id="modalHanHienTai" readonly disabled>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-primary">Chọn ngày trả mới:</label>
+                        <input type="date" name="ngayTraMoi" class="form-control" id="modalNgayMoi" required>
+                        <div class="form-text">Bạn được gia hạn tối đa 14 ngày kể từ hạn hiện tại.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận gia hạn</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JAVASCRIPT XỬ LÝ MODAL -->
+<script>
+    var extendModal = document.getElementById('extendModal')
+    extendModal.addEventListener('show.bs.modal', function (event) {
+        // 1. Lấy dữ liệu từ nút bấm
+        var button = event.relatedTarget
+        var maPhieu = button.getAttribute('data-id')
+        var tenSach = button.getAttribute('data-book')
+        var hanHienTaiStr = button.getAttribute('data-current') // Dạng yyyy-MM-dd
+
+        // 2. Điền vào Modal
+        document.getElementById('modalMaPhieu').value = maPhieu
+        document.getElementById('modalTenSach').value = tenSach
+        document.getElementById('modalHanHienTai').value = hanHienTaiStr
+
+        // 3. Tính toán giới hạn ngày (Min và Max)
+        var hanHienTai = new Date(hanHienTaiStr);
+
+        // Min = Ngày hôm sau của hạn hiện tại
+        var minDate = new Date(hanHienTai);
+        minDate.setDate(minDate.getDate() + 1);
+
+        // Max = Hạn hiện tại + 14 ngày
+        var maxDate = new Date(hanHienTai);
+        maxDate.setDate(maxDate.getDate() + 14);
+
+        // Format sang yyyy-MM-dd để gán vào input date
+        var minStr = minDate.toISOString().split('T')[0];
+        var maxStr = maxDate.toISOString().split('T')[0];
+
+        var inputNgayMoi = document.getElementById('modalNgayMoi');
+        inputNgayMoi.min = minStr;
+        inputNgayMoi.max = maxStr;
+        inputNgayMoi.value = minStr; // Mặc định chọn ngày sớm nhất có thể
+    })
+</script>

@@ -60,7 +60,7 @@ namespace QuanLyThuVien.Controllers
         public async Task<IActionResult> Login(string email, string password)
         {
             var user = _context.NguoiDungs.FirstOrDefault(s => s.Email == email && s.MatKhau == password);
-            
+
             if (user != null)
             {
                 // Tạo thông tin phiên làm việc (Claims)
@@ -76,8 +76,8 @@ namespace QuanLyThuVien.Controllers
 
                 // Đăng nhập vào hệ thống
                 await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme, 
-                    new ClaimsPrincipal(claimsIdentity), 
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
                 return RedirectToAction("Index", "Sach");
@@ -94,7 +94,7 @@ namespace QuanLyThuVien.Controllers
         {
             // 1. Lấy Email người dùng từ Cookie
             var emailUser = User.FindFirst(ClaimTypes.Email)?.Value;
-            
+
             // 2. Tìm ID người dùng trong Database
             var nguoiDung = _context.NguoiDungs.FirstOrDefault(u => u.Email == emailUser);
             if (nguoiDung == null) return RedirectToAction("Login");
@@ -102,7 +102,7 @@ namespace QuanLyThuVien.Controllers
             // 3. Lấy danh sách phiếu mượn của người này
             // Dùng .Include(p => p.Sach) để lấy luôn tên sách và ảnh bìa
             var lichSu = _context.PhieuMuons
-                            .Include(p => p.Sach) 
+                            .Include(p => p.Sach)
                             .Where(p => p.MaNguoiDung == nguoiDung.MaNguoiDung)
                             .OrderByDescending(p => p.NgayMuon) // Mới nhất lên đầu
                             .ToList();
@@ -110,26 +110,53 @@ namespace QuanLyThuVien.Controllers
             return View(lichSu);
         }
         [Authorize]
-        public IActionResult GiaHan(int maPhieu)
+        [HttpPost]
+        public IActionResult GiaHan(int maPhieu, DateTime ngayTraMoi)
         {
             var phieu = _context.PhieuMuons.Find(maPhieu);
 
-            if (phieu != null && phieu.TrangThai == 0)
+            if (phieu == null || phieu.TrangThai != 0)
             {
-                // Kiểm tra điều kiện: Chưa quá hạn VÀ Chưa gia hạn lần nào
-                if (phieu.HanTra >= DateTime.Now && phieu.SoLanGiaHan < 1)
-                {
-                    phieu.HanTra = phieu.HanTra.AddDays(7); // Cộng thêm 7 ngày
-                    phieu.SoLanGiaHan += 1; // Tăng số lần gia hạn
-                    
-                    _context.SaveChanges();
-                    TempData["Message"] = "Gia hạn thành công thêm 7 ngày!";
-                }
-                else
-                {
-                    TempData["Error"] = "Không thể gia hạn (Sách đã quá hạn hoặc đã gia hạn rồi).";
-                }
+                TempData["Error"] = "Phiếu mượn không hợp lệ.";
+                return RedirectToAction("Profile");
             }
+
+            // 1. Kiểm tra: Sách đã quá hạn chưa?
+            if (DateTime.Now > phieu.HanTra)
+            {
+                TempData["Error"] = "Sách đã quá hạn, không thể gia hạn. Vui lòng mang trả và nộp phạt.";
+                return RedirectToAction("Profile");
+            }
+
+            // 2. Kiểm tra: Đã hết số lần gia hạn chưa? (Ví dụ: Tối đa 2 lần)
+            if (phieu.SoLanGiaHan >= 2)
+            {
+                TempData["Error"] = "Bạn đã hết số lần gia hạn cho cuốn sách này (Tối đa 2 lần).";
+                return RedirectToAction("Profile");
+            }
+
+            // 3. Kiểm tra: Ngày chọn có hợp lệ không?
+            // - Phải lớn hơn hạn cũ
+            // - Không được vượt quá 14 ngày so với hạn cũ
+            var maxNgayGiaHan = phieu.HanTra.AddDays(14);
+
+            if (ngayTraMoi <= phieu.HanTra)
+            {
+                TempData["Error"] = "Ngày gia hạn phải sau ngày hạn trả hiện tại.";
+            }
+            else if (ngayTraMoi > maxNgayGiaHan)
+            {
+                TempData["Error"] = $"Bạn chỉ được gia hạn tối đa 14 ngày (Đến {maxNgayGiaHan:dd/MM/yyyy}).";
+            }
+            else
+            {
+                // Hợp lệ -> Lưu
+                phieu.HanTra = ngayTraMoi;
+                phieu.SoLanGiaHan += 1;
+                _context.SaveChanges();
+                TempData["Message"] = $"Gia hạn thành công! Hạn mới là {phieu.HanTra:dd/MM/yyyy}.";
+            }
+
             return RedirectToAction("Profile");
         }
         // --- ĐĂNG XUẤT ---

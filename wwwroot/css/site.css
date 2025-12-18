@@ -55,3 +55,37 @@ body {
     font-weight: 500;
     letter-spacing: 0.5px;
 }
+
+/* Tùy chỉnh nút điều hướng Carousel */
+.custom-nav-btn {
+    width: 5%; /* Thu nhỏ vùng bấm */
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.custom-nav-btn:hover {
+    opacity: 1;
+}
+
+/* Đẩy nút ra ngoài biên một chút để không che sách */
+.carousel-control-prev {
+    left: -40px;
+}
+
+.carousel-control-next {
+    right: -40px;
+}
+
+/* Hiệu ứng hover cho card */
+.hover-shadow:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important; 
+    transition: all 0.3s ease; 
+}
+.hover-card { 
+    transition: all 0.3s ease; 
+}
+.hover-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; 
+}

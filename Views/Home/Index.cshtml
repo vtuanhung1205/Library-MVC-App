@@ -1,20 +1,21 @@
-@{
-    ViewData["Title"] = "Trang Chủ";
+@model QuanLyThuVien.Models.ViewModels.HomeViewModel
+@{ ViewData["Title"] = "Trang Chủ"; 
+     var vdTrend = new ViewDataDictionary(ViewData) { { "CarouselId", "carouselTrend" } };
+    var vdNew = new ViewDataDictionary(ViewData) { { "CarouselId", "carouselNew" } };
+    var vdGood = new ViewDataDictionary(ViewData) { { "CarouselId", "carouselGood" } };
 }
 
-<!-- HERO SECTION -->
-<div class="p-5 mb-4 bg-light rounded-3 shadow-sm text-center" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-    <div class="container-fluid py-5">
-        <h1 class="display-4 fw-bold text-primary"><i class="bi bi-book-half"></i> Quản Lý Thư Viện</h1>
-        <p class="col-md-8 fs-4 mx-auto text-muted">Khám phá kho tàng tri thức với hơn 100+ đầu sách, giáo trình và tài liệu học thuật.</p>
-        
-        <!-- Thanh tìm kiếm trung tâm -->
-        <div class="row justify-content-center mt-4">
+<!-- 1. HERO SECTION (Giữ nguyên) -->
+<div class="p-5 mb-5 bg-light rounded-3 shadow-sm text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+    <div class="container-fluid py-5 position-relative" style="z-index: 2;">
+        <h1 class="display-4 fw-bold text-primary mb-3"><i class="bi bi-book-half"></i> E-Library</h1>
+        <p class="col-md-8 fs-5 mx-auto text-muted mb-4">Khám phá kho tàng tri thức với hàng trăm đầu sách, giáo trình và tài liệu học thuật chất lượng cao.</p>
+        <div class="row justify-content-center">
             <div class="col-md-6">
                 <form asp-controller="Sach" asp-action="TimKiem" method="get">
-                    <div class="input-group input-group-lg shadow-sm">
-                        <input type="text" name="tuKhoa" class="form-control border-0" placeholder="Tìm tên sách, tác giả, ISBN..." aria-label="Search">
-                        <button class="btn btn-primary px-4" type="button"><i class="bi bi-search"></i> Tìm kiếm</button>
+                    <div class="input-group input-group-lg shadow-sm bg-white rounded-pill p-1">
+                        <input type="text" name="tuKhoa" class="form-control border-0 rounded-pill ps-4" placeholder="Tìm kiếm sách, tác giả..." aria-label="Search">
+                        <button class="btn btn-primary rounded-pill px-4 m-1 fw-bold" type="button"><i class="bi bi-search"></i> Tìm</button>
                     </div>
                 </form>
             </div>
@@ -22,46 +23,42 @@
     </div>
 </div>
 
-<!-- FEATURED CATEGORIES -->
-<div class="container">
-    <h3 class="text-center mb-4 fw-bold text-secondary">Khám Phá Theo Danh Mục</h3>
+<!-- 2. DANH MỤC (Giữ nguyên) -->
+<div class="container mb-5">
+    <!-- (Code danh mục giữ nguyên như cũ) -->
     <div class="row g-4">
-        <!-- Card 1 -->
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow text-center p-3 bg-white">
                 <div class="card-body">
-                    <i class="bi bi-laptop fs-1 text-info"></i>
-                    <h5 class="card-title mt-3">Công Nghệ</h5>
+                    <div class="mb-3 text-info"><i class="bi bi-laptop fs-1"></i></div>
+                    <h6 class="fw-bold">Công Nghệ</h6>
                     <a asp-controller="Sach" asp-action="Index" asp-route-loai="Sách" class="stretched-link"></a>
                 </div>
             </div>
         </div>
-        <!-- Card 2 -->
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow text-center p-3 bg-white">
                 <div class="card-body">
-                    <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
-                    <h5 class="card-title mt-3">Kinh Tế</h5>
+                    <div class="mb-3 text-success"><i class="bi bi-graph-up-arrow fs-1"></i></div>
+                    <h6 class="fw-bold">Kinh Tế</h6>
                     <a asp-controller="Sach" asp-action="Index" asp-route-loai="Giáo trình" class="stretched-link"></a>
                 </div>
             </div>
         </div>
-        <!-- Card 3 -->
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow text-center p-3 bg-white">
                 <div class="card-body">
-                    <i class="bi bi-translate fs-1 text-warning"></i>
-                    <h5 class="card-title mt-3">Ngoại Ngữ</h5>
+                    <div class="mb-3 text-warning"><i class="bi bi-translate fs-1"></i></div>
+                    <h6 class="fw-bold">Ngoại Ngữ</h6>
                     <a asp-controller="Sach" asp-action="Index" asp-route-loai="Giáo trình" class="stretched-link"></a>
                 </div>
             </div>
         </div>
-        <!-- Card 4 -->
         <div class="col-md-3">
-            <div class="card h-100 border-0 shadow-sm hover-shadow transition-card text-center p-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow text-center p-3 bg-white">
                 <div class="card-body">
-                    <i class="bi bi-mortarboard fs-1 text-danger"></i>
-                    <h5 class="card-title mt-3">Luận Văn</h5>
+                    <div class="mb-3 text-danger"><i class="bi bi-mortarboard fs-1"></i></div>
+                    <h6 class="fw-bold">Luận Văn</h6>
                     <a asp-controller="Sach" asp-action="Index" asp-route-loai="Tài liệu" class="stretched-link"></a>
                 </div>
             </div>
@@ -69,7 +66,36 @@
     </div>
 </div>
 
-<style>
-    .hover-shadow:hover { transform: translateY(-5px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; }
-    .transition-card { transition: all 0.3s ease; }
-</style>
+<!-- 3. SÁCH THỊNH HÀNH (CAROUSEL) -->
+<div class="container mb-5 position-relative">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold text-dark border-start border-4 border-primary ps-3">🔥 Sách Thịnh Hành</h3>
+        <a asp-controller="Sach" asp-action="Index" class="text-decoration-none fw-bold">Xem tất cả <i class="bi bi-arrow-right"></i></a>
+    </div>
+    
+    <!-- Gọi Partial View Carousel -->
+    <partial name="_BookCarousel" model="Model.SachThinhHanh" view-data="vdTrend" />
+</div>
+
+<!-- 4. SÁCH MỚI (CAROUSEL) -->
+<div class="container mb-5 position-relative">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold text-dark border-start border-4 border-success ps-3">✨ Sách Mới Cập Nhật</h3>
+        <a asp-controller="Sach" asp-action="Index" class="text-decoration-none fw-bold text-success">Xem tất cả <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <!-- Gọi Partial View Carousel -->
+    <partial name="_BookCarousel" model="Model.SachMoi" view-data="vdNew" />
+</div>
+
+<!-- 5. SÁCH HAY (CAROUSEL) -->
+<div class="container mb-5">
+    <div class="p-4 rounded-3 bg-light border position-relative">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold text-dark border-start border-4 border-warning ps-3">💡 Sách Hay Để Đọc</h3>
+        </div>
+
+        <!-- Gọi Partial View Carousel -->
+        <partial name="_BookCarousel" model="Model.SachHay" view-data="vdGood" />
+    </div>
+</div>

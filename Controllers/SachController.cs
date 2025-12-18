@@ -27,7 +27,7 @@ namespace QuanLyThuVien.Controllers
 
             if (!string.IsNullOrEmpty(loai))
             {
-                
+
                 query = query.Where(s => s.LoaiTaiLieu == loai);
                 ViewBag.LoaiHienTai = loai;
             }
@@ -41,13 +41,13 @@ namespace QuanLyThuVien.Controllers
 
             if (!string.IsNullOrEmpty(tuKhoa))
             {
-                query = query.Where(s => s.TenSach.Contains(tuKhoa) 
+                query = query.Where(s => s.TenSach.Contains(tuKhoa)
                                     || s.TacGia.Contains(tuKhoa)
                                     || s.ISBN.Contains(tuKhoa)
                                     || s.SoHieu.Contains(tuKhoa));
             }
-            
-            ViewBag.TuKhoa = tuKhoa; 
+
+            ViewBag.TuKhoa = tuKhoa;
             return View("Index", query.ToList());
         }
 
@@ -59,7 +59,7 @@ namespace QuanLyThuVien.Controllers
                 return NotFound();
             }
 
-            
+
             var sach = _context.Sachs
                 .Include(s => s.TheLoai)
                 .FirstOrDefault(m => m.MaSach == id);
@@ -73,13 +73,15 @@ namespace QuanLyThuVien.Controllers
         }
 
         [Authorize]
-        [HttpPost] 
+        [HttpPost]
         public IActionResult DatMuon(int maSach)
         {
             var sach = _context.Sachs.Find(maSach);
-            if (sach == null || sach.CoSan == false) 
+
+            if (sach == null || (sach.SoLuong - sach.DaMuon) <= 0)
             {
-                return NotFound("Sách không tồn tại hoặc đã có người mượn.");
+                TempData["Error"] = "Sách này đã hết bản lưu trong kho.";
+                return RedirectToAction("Details", new { id = maSach });
             }
 
             var emailUser = User.FindFirst(ClaimTypes.Email)?.Value;
@@ -95,22 +97,18 @@ namespace QuanLyThuVien.Controllers
                 TempData["Error"] = "Bạn đã mượn quá giới hạn (3 cuốn). Vui lòng trả sách trước khi mượn thêm.";
                 return RedirectToAction("Details", new { id = maSach });
             }
-
+            sach.DaMuon += 1;
             var phieuMuon = new PhieuMuon
             {
                 MaSach = maSach,
                 MaNguoiDung = nguoiDung.MaNguoiDung,
                 NgayMuon = DateTime.Now,
-                 HanTra = DateTime.Now.AddDays(14),
-                TrangThai = 0,
-                TienPhat = 0,      
-                SoLanGiaHan = 0   
+                HanTra = DateTime.Now.AddDays(14),
+                TrangThai = 0
             };
 
-            sach.CoSan = false; 
-
             _context.PhieuMuons.Add(phieuMuon);
-            _context.SaveChanges();
+            _context.SaveChanges(); // Lưu cả PhieuMuon và cập nhật Sach
 
             TempData["Message"] = "Đăng ký mượn thành công! Vui lòng đến thư viện nhận sách.";
             return RedirectToAction("Details", new { id = maSach });

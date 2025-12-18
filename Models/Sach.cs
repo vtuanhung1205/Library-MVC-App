@@ -1,10 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace QuanLyThuVien.Models
 {
@@ -14,22 +9,22 @@ namespace QuanLyThuVien.Models
         public int MaSach { get; set; }
 
         [Required]
-        [Display(Name = "Nhan đề")] // Thay vì "Tên sách"
+        [Display(Name = "Nhan đề")]
         public string TenSach { get; set; } = string.Empty;
 
         [Display(Name = "Tác giả")]
         public string? TacGia { get; set; }
-        
+
         [Display(Name = "Trị giá")]
-        public decimal Gia { get; set; } 
+        public decimal Gia { get; set; }
 
         [Display(Name = "ISBN")]
         [StringLength(20)]
-        public string? ISBN { get; set; } // Mã số sách quốc tế
+        public string? ISBN { get; set; }
 
         [Display(Name = "Nhà xuất bản")]
         public string? NhaXuatBan { get; set; }
-        
+
         [Display(Name = "Loại tài liệu")]
         public string LoaiTaiLieu { get; set; } = "Sách";
 
@@ -37,18 +32,31 @@ namespace QuanLyThuVien.Models
         public int NamXuatBan { get; set; }
 
         [Display(Name = "Số định danh (Call Number)")]
-        public string? SoHieu { get; set; } 
+        public string? SoHieu { get; set; }
 
+        // --- SỬA LỖI TẠI ĐÂY: Đưa biến TomTat lên ngay dưới Attribute của nó ---
         [Display(Name = "Tóm tắt")]
         [DataType(DataType.MultilineText)]
         public string? TomTat { get; set; }
+        // -----------------------------------------------------------------------
+
+        [Display(Name = "Tổng số lượng")]
+        public int SoLuong { get; set; } = 5;
+
+        [Display(Name = "Đã mượn")]
+        public int DaMuon { get; set; } = 0;
+
+        // Thuộc tính tính toán
+        [NotMapped]
+        public int ConLai => SoLuong - DaMuon;
+
+        [NotMapped]
+        public bool CoSan => ConLai > 0;
 
         public string? AnhBia { get; set; }
 
-        public bool CoSan { get; set; } = true; 
-
         public int MaTheLoai { get; set; }
-        
+
         [ForeignKey("MaTheLoai")]
         public TheLoai? TheLoai { get; set; }
     }
