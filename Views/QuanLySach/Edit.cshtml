@@ -1,0 +1,147 @@
+@model QuanLyThuVien.Models.Sach
+
+@{
+    ViewData["Title"] = "Cập nhật sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> Cập Nhật Thông Tin Sách</h2>
+        <a asp-action="Index" class="btn btn-secondary rounded-pill"><i class="bi bi-arrow-left"></i> Quay lại danh sách</a>
+    </div>
+
+    <div class="card border-0 shadow-lg rounded-3">
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="MaSach" />
+
+                <div class="row">
+                    <!-- CỘT TRÁI: THÔNG TIN CƠ BẢN -->
+                    <div class="col-md-8">
+                        <h5 class="text-muted border-bottom pb-2 mb-3">Thông tin chung</h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label asp-for="TenSach" class="form-label fw-bold">Tên Sách / Nhan đề</label>
+                                <input asp-for="TenSach" class="form-control" />
+                                <span asp-validation-for="TenSach" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="TacGia" class="form-label fw-bold">Tác Giả</label>
+                                <input asp-for="TacGia" class="form-control" />
+                                <span asp-validation-for="TacGia" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="MaTheLoai" class="form-label fw-bold">Thể Loại</label>
+                                <select asp-for="MaTheLoai" class="form-select" asp-items="ViewBag.MaTheLoai"></select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="LoaiTaiLieu" class="form-label fw-bold">Loại Tài Liệu</label>
+                                <select asp-for="LoaiTaiLieu" class="form-select" asp-items="ViewBag.LoaiTaiLieu"></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Gia" class="form-label fw-bold">Giá Tiền (VNĐ)</label>
+                                <input asp-for="Gia" class="form-control" type="number" />
+                                <span asp-validation-for="Gia" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <h5 class="text-muted border-bottom pb-2 mb-3 mt-4">Thông tin xuất bản</h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="NhaXuatBan" class="form-label fw-bold">Nhà Xuất Bản</label>
+                                <input asp-for="NhaXuatBan" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="NamXuatBan" class="form-label fw-bold">Năm Xuất Bản</label>
+                                <input asp-for="NamXuatBan" class="form-control" type="number" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="ISBN" class="form-label fw-bold">Mã ISBN</label>
+                                <input asp-for="ISBN" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="SoHieu" class="form-label fw-bold">Số Hiệu (Call Number)</label>
+                                <input asp-for="SoHieu" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TomTat" class="form-label fw-bold">Tóm Tắt Nội Dung</label>
+                            <textarea asp-for="TomTat" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="TomTat" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- CỘT PHẢI: KHO & ẢNH -->
+                    <div class="col-md-4 bg-light p-3 rounded-3">
+                        <h5 class="text-muted border-bottom pb-2 mb-3">Quản lý kho</h5>
+                        
+                        <div class="mb-3">
+                            <label asp-for="SoLuong" class="form-label fw-bold">Tổng Số Lượng Nhập</label>
+                            <input asp-for="SoLuong" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="SoLuong" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DaMuon" class="form-label fw-bold">Đang Cho Mượn</label>
+                            <input asp-for="DaMuon" class="form-control" type="number" min="0" readonly style="background-color: #e9ecef;" />
+                            <div class="form-text text-muted">Số lượng này tự động cập nhật khi có người mượn/trả.</div>
+                        </div>
+
+                        <h5 class="text-muted border-bottom pb-2 mb-3 mt-4">Hình Ảnh</h5>
+                        
+                        <div class="mb-3">
+                            <label asp-for="AnhBia" class="form-label fw-bold">URL Ảnh Bìa</label>
+                            <input asp-for="AnhBia" class="form-control" id="imgUrlInput" oninput="previewImage()" />
+                            <span asp-validation-for="AnhBia" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <label class="form-label text-muted small">Xem trước ảnh bìa</label>
+                            <div class="border rounded bg-white p-2 shadow-sm">
+                                <img id="imgPreview" src="@Model.AnhBia" class="img-fluid" style="max-height: 250px; object-fit: contain;" onerror="this.src='https://placehold.co/200x300?text=No+Image'" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+                    <a asp-action="Index" class="btn btn-light me-2">Hủy bỏ</a>
+                    <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">
+                        <i class="bi bi-save"></i> Lưu Thay Đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Hàm xem trước ảnh khi nhập URL
+        function previewImage() {
+            var url = document.getElementById('imgUrlInput').value;
+            var img = document.getElementById('imgPreview');
+            if (url) {
+                img.src = url;
+            } else {
+                img.src = 'https://placehold.co/200x300?text=No+Image';
+            }
+        }
+    </script>
+}

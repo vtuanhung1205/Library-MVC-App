@@ -7,4 +7,4 @@ build_property.PublishSingleFile =
 build_property.IncludeAllContentForSelfExtract = 
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
 build_property.RootNamespace = QuanLyThuVien
-build_property.ProjectDir = C:\Laura\File Visual Code Purple\QuanLyThuVienTest\QuanLyThuVien\
+build_property.ProjectDir = /home/hans/Documents/Library-MVC-App/

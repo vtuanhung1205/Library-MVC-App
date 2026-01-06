@@ -89,3 +89,36 @@ body {
     transform: translateY(-5px); 
     box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; 
 }
+
+footer-link {
+    transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #fff !important; /* Chuyển sang màu trắng sáng */
+    padding-left: 5px;      /* Hiệu ứng dịch chuyển nhẹ sang phải */
+}
+
+/* Icon mạng xã hội */
+.social-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-icon:hover {
+    background-color: #0d6efd; /* Màu xanh Primary */
+    transform: translateY(-3px); /* Nổi lên */
+    color: white !important;
+}
+
+/* Đảm bảo footer luôn ở đáy (Sticky Footer) */
+html, body {
+    height: 100%;
+}

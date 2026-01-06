@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace QuanLyThuVien.Controllers
 {
-    [Authorize(Roles = "Admin")] // Chỉ Admin được vào
+    [Authorize(Roles = "Admin")]
     public class QuanLySachController : Controller
     {
         private readonly ThuVienContext _context;
@@ -52,12 +52,65 @@ namespace QuanLyThuVien.Controllers
         }
 
         // 3. Sửa (Giao diện)
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            var sach = _context.Sachs.Find(id);
-            if (sach == null) return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var sach = _context.Sachs.Find(id);
+            if (sach == null)
+            {
+                return NotFound();
+            }
+
+            // Tạo danh sách chọn Thể loại, chọn sẵn thể loại hiện tại của sách
             ViewBag.MaTheLoai = new SelectList(_context.TheLoais, "MaTheLoai", "TenTheLoai", sach.MaTheLoai);
+
+            // Tạo danh sách chọn Loại tài liệu
+            var loaiTaiLieu = new List<string> { "Sách", "Giáo trình", "Tài liệu" };
+            ViewBag.LoaiTaiLieu = new SelectList(loaiTaiLieu, sach.LoaiTaiLieu);
+
+            return View(sach);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Sach sach)
+        {
+            if (id != sach.MaSach)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(sach);
+                    _context.SaveChanges();
+                    TempData["Message"] = "Cập nhật sách thành công!";
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Sachs.Any(e => e.MaSach == sach.MaSach))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Nếu lỗi thì load lại dropdown
+            ViewBag.MaTheLoai = new SelectList(_context.TheLoais, "MaTheLoai", "TenTheLoai", sach.MaTheLoai);
+            var loaiTaiLieu = new List<string> { "Sách", "Giáo trình", "Tài liệu" };
+            ViewBag.LoaiTaiLieu = new SelectList(loaiTaiLieu, sach.LoaiTaiLieu);
+
             return View(sach);
         }
 

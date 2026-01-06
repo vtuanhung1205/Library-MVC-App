@@ -18,13 +18,10 @@ namespace QuanLyThuVien.Controllers
 
         public IActionResult Index()
         {
-            // 1. Sách Mới: Lấy 12 cuốn mới nhất
             var sachMoi = _context.Sachs.OrderByDescending(s => s.MaSach).Take(12).ToList();
 
-            // 2. Sách Thịnh Hành: Lấy 12 cuốn đầu
             var sachThinhHanh = _context.Sachs.Take(12).ToList();
 
-            // 3. Sách Hay: Lấy 12 cuốn tiếp theo
             var sachHay = _context.Sachs.Skip(12).Take(12).ToList();
 
             var viewModel = new HomeViewModel
@@ -35,6 +32,24 @@ namespace QuanLyThuVien.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public IActionResult Rules()
+        {
+            return View();
+        }
+        public IActionResult Guide()
+        {
+            return View();
+        }
+        public IActionResult Fines()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
         }
     }
 }

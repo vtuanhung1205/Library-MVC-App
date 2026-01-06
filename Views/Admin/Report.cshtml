@@ -1,0 +1,144 @@
+@model QuanLyThuVien.Models.ViewModels.ReportViewModel
+@{
+    ViewData["Title"] = "Báo Cáo Thống Kê";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="fw-bold text-primary mb-4"><i class="bi bi-bar-chart-line-fill"></i> Báo Cáo & Thống Kê</h2>
+
+    <!-- 1. CARDS TỔNG QUAN -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-primary text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase opacity-75">Tổng Sách Trong Kho</h6>
+                    <h2 class="display-4 fw-bold">@Model.TongSach</h2>
+                    <i class="bi bi-book position-absolute top-0 end-0 m-3 fs-1 opacity-25"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-success text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase opacity-75">Tổng Lượt Mượn</h6>
+                    <h2 class="display-4 fw-bold">@Model.TongPhieuMuon</h2>
+                    <i class="bi bi-journal-check position-absolute top-0 end-0 m-3 fs-1 opacity-25"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-danger text-white h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase opacity-75">Doanh Thu Phạt</h6>
+                    <h2 class="display-4 fw-bold">@Model.TongTienPhat.ToString("N0") đ</h2>
+                    <i class="bi bi-cash-coin position-absolute top-0 end-0 m-3 fs-1 opacity-25"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. BIỂU ĐỒ -->
+    <div class="row g-4">
+        <!-- Biểu đồ tròn: Phân loại User -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">
+                    <i class="bi bi-people-fill text-info"></i> Tình Trạng Độc Giả
+                </div>
+                <div class="card-body">
+                    <canvas id="userChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ cột: Top Sách -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">
+                    <i class="bi bi-trophy-fill text-warning"></i> Top 5 Sách Mượn Nhiều Nhất
+                </div>
+                <div class="card-body">
+                    <canvas id="bookChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Biểu đồ Doughnut: Phân bố thể loại -->
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">
+                    <i class="bi bi-pie-chart-fill text-primary"></i> Phân Bố Thể Loại Sách
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px; width: 100%; display: flex; justify-content: center;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NHÚNG CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // 1. Dữ liệu User
+    const ctxUser = document.getElementById('userChart').getContext('2d');
+    new Chart(ctxUser, {
+        type: 'pie',
+        data: {
+            labels: ['Chưa từng mượn (Null)', 'Đang mượn (Tốt)', 'Quá hạn (Xấu)', 'Đã trả hết (Rảnh)'],
+            datasets: [{
+                data: [@Model.UserNull, @Model.UserDangMuon, @Model.UserQuaHan, @Model.UserDaTra],
+                backgroundColor: ['#6c757d', '#198754', '#dc3545', '#0d6efd'],
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // 2. Dữ liệu Top Sách
+    const ctxBook = document.getElementById('bookChart').getContext('2d');
+    // Chuyển dữ liệu C# List sang JS Array
+    const bookLabels = @Html.Raw(Json.Serialize(Model.TopSachTen));
+    const bookData = @Html.Raw(Json.Serialize(Model.TopSachLuotMuon));
+
+    new Chart(ctxBook, {
+        type: 'bar',
+        data: {
+            labels: bookLabels,
+            datasets: [{
+                label: 'Số lượt mượn',
+                data: bookData,
+                backgroundColor: 'rgba(255, 193, 7, 0.6)',
+                borderColor: 'rgba(255, 193, 7, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    // 3. Dữ liệu Thể loại
+    const ctxCat = document.getElementById('categoryChart').getContext('2d');
+    const catLabels = @Html.Raw(Json.Serialize(Model.TheLoaiTen));
+    const catData = @Html.Raw(Json.Serialize(Model.TheLoaiSoLuong));
+
+    new Chart(ctxCat, {
+        type: 'doughnut',
+        data: {
+            labels: catLabels,
+            datasets: [{
+                data: catData,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF', '#2ecc71', '#e74c3c', '#34495e'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: { maintainAspectRatio: false }
+    });
+</script>
